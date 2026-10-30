@@ -1,0 +1,38 @@
+{
+  "title": "Gathering feedback on `sphinx-benchmark` extension + Proposal to add the `sphinx-benchmark` extension to the sphinx-doc github organisation",
+  "body": "Hi Sphinx maintainers/users/contributors,\r\n\r\nI've been building a tool that benchmarks and profiles Sphinx's documentation builds. It breaks down a build and times event by event, then handler by handler within each event, and it also reports a summary for the time between event emissions.\r\n\r\nsphinx-benchmark extension link: https://github.com/Schefflera-Arboricola/sphinx-benchmark\r\nPyPI: https://pypi.org/project/sphinx-benchmark/\r\n\r\nI'd love for Sphinx users, maintainers, contributors, extension developers and everyone to try it out and share your feedback/questions/issues -- what's wrong with it or missing. Another release is coming shortly with more improvements.\r\n\r\nAlso, I've been building this as part of the Quansight internship this year, and I was wondering whether the Sphinx community would be open to hosting it in the org. I think being under the Sphinx umbrella would help the project get more visibility, usage and community engagement. I would really like to keep maintaining it after the internship as well, and I would be happy to change the project if needed to meet the project's standards for code, docs, testing, or release process, etc. Please LMK if you have any questions or concerns-- I would be happy to address those.\r\n\r\nIf there's a more appropriate place to post this, please point me there and I'll move it.\r\n\r\nThank you for your time!\r\n\r\n\r\nFun Fact: Recently a SunPy maintainer ran this extension with their docs and was able to reduce the docs build time from 317s to 190s -- roughly 40% off their docs build. They tracked it down to an empty-template render check running the main nav twice per page, and fixed it with a config option (refer pydata/pydata-sphinx-theme#2477 and sunpy/sunpy-sphinx-theme#332). Projects using the same sunpy-sphinx-theme (like astropy) may also see a similar speedup soon.",
+  "timestamp": "2026-09-29T10:43:36Z",
+  "url": "https://github.com/orgs/sphinx-doc/discussions/14652",
+  "uuids": [
+    "0ff0aeed-fcec-411a-9c22-b0df2133a948"
+  ],
+  "comments": [
+    {
+      "id": 18472686,
+      "parent": null,
+      "body": "Congrats on the successful internship. Sounds like a great project! Melissa DM'd me on the WTD Slack about it a while back.\r\n\r\nI tried it out. You can see the results for pigweed.dev here: https://pwrev.dev/478566\r\n\r\nSee https://technicalwriting.dev/2025/03/tutorial/index.html for background re: how we build Sphinx.\r\n\r\nConsider relaxing the requirement for Sphinx 9. We will be stuck on Sphinx 8 for a while. I believe Sphinx 9 requires Python 3.12 whereas we will be on Python 3.11 until it reaches end-of-life, which is around Q4 2027. (Edit: my team lead just said that we should be able to build docs with newer version of Python, so my previous statement might be incorrect. Need to dig in further.)\r\n\r\nI was hoping for some easy wins re: optimizing event listeners under my control. But as you mention in [the gaps between events](https://github.com/Schefflera-Arboricola/sphinx-benchmark/blob/main/benchmarking_outputs/README.md#table-2--the-gaps-between-events) the results report that most of the build time is Sphinx doing stuff between events. Nonetheless it's useful to see that the `html-page-context -> doctree-resolved` gap is where most time is spent. I've got an agent running the `gaps` command now to help me further understand what's going on there: https://pwrev.dev/478606 (had to push it up as a separate change because I had already abandoned the first one)\r\n\r\nWe use PyData Sphinx Theme so it sounds like that optimization in https://github.com/pydata/pydata-sphinx-theme/pull/2477 is going to help us a lot! I now eagerly await v0.22 ",
+      "timestamp": "2026-09-16T23:36:18Z",
+      "uuids": [
+        "7e9b731a-3789-432a-a309-af3763f629da"
+      ]
+    },
+    {
+      "id": 18554290,
+      "parent": 18472686,
+      "body": "Hi @kaycebasques , Thanks for trying the extension out and for your kind words and spreading the word in WTD slack :)\r\n\r\nI've recently dropped the minimum required sphinx version to 8.2 and I'll be making the version 0.2 release soon! You'll be able to see the function-wise breakdowns and function call trees for the whole build, events, handlers and also for the gaps (i.e. between events) and many other interesting things as well! \r\n\r\nThanks for the feedback :)",
+      "timestamp": "2026-09-22T14:25:51Z",
+      "uuids": [
+        "33e235a5-2723-4d08-8891-4228f6301ff9"
+      ]
+    },
+    {
+      "id": 18657453,
+      "parent": 18472686,
+      "body": "Hi, the version 0.2.0 of sphinx-benchmark extension is out and now you can get more detailed benchmarks, with the function call trees and function-wise breakdown: https://pypi.org/project/sphinx-benchmark/\r\n\r\nPlease consider giving it a try and sharing your feedback: https://github.com/Schefflera-Arboricola/sphinx-benchmark\r\n\r\nThanks!",
+      "timestamp": "2026-09-29T10:43:36Z",
+      "uuids": [
+        "f8d0ebeb-05b4-477e-8daa-9c156b00111a"
+      ]
+    }
+  ]
+}

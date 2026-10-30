@@ -1,0 +1,37 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python/uv:lock.bzl", "lock")
+load("@deps//:requirements.bzl", "requirement")
+
+lock(
+    name = "deps",
+    srcs = ["deps.in"],
+    out = "deps.txt",
+)
+
+py_library(
+    name = "model",
+    srcs = ["model.py"],
+    deps = [
+        requirement("chonkie"),
+        requirement("google-genai"),
+        requirement("python-dotenv"),
+    ],
+)
+
+py_library(
+    name = "github",
+    srcs = ["github.py"],
+    deps = [
+        ":model",
+    ],
+)
+
+py_binary(
+    name = "index",
+    srcs = ["index.py"],
+    main = "index.py",
+    deps = [
+        ":github",
+        ":model",
+    ],
+)

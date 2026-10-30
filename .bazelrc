@@ -1,0 +1,13 @@
+# Bazel 9 removed built-in Python and C++ symbols from core Starlark globals;
+# autoload them for transitive dependencies that reference them without load().
+common --incompatible_autoload_externally=+py_runtime,+cc_library,+CcToolchainConfigInfo
+
+# Allow the legacy ctx.resolve_tools API still used by some transitive rulesets.
+common --noincompatible_disallow_ctx_resolve_tools
+
+# Use platform-based C++ toolchain resolution instead of legacy crosstool flags.
+build --incompatible_enable_cc_toolchain_resolution
+
+# Do not implicitly create empty __init__.py files in the runfiles tree, which
+# can shadow top-level packages or break namespace packages.
+common --incompatible_default_to_explicit_init_py
